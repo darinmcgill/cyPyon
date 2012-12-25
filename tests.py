@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from cyPyon import *
 
 def testAssert():
@@ -128,6 +129,12 @@ def testPyobReprMode():
     p[0] = "cheese"
     p.reprMode = 1
     assert repr(p) == "foo('cheese',bar=3)",repr(p)
+    print "ok"
+
+def testParseInt():
+    p = Parser()
+    out = p.parse("42")
+    assert repr(out) == '42',repr(out)
     print "ok"
 
 

@@ -8,7 +8,7 @@ cdef readNumber(char **stringPtr):
         p += 1
     if p[0] == 43: p += 1 # '+'
     cdef char floating = 0
-    cdef int64_t beforeDecimal = 0
+    cdef long beforeDecimal = 0
     cdef double afterDecimal = 0.0
     cdef int e = 0
     cdef char eSign = +1 
