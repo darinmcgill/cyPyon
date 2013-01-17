@@ -35,6 +35,13 @@ cdef class Pyob:
             return True
         raise Exception("op not supprted:%s" % op)
 
+    def get(self,key,default=None):
+        if isinstance(key,str):
+            return self.keyed.get(key,default)
+        if isinstance(key,int):
+            return self.ordered[key] if key < len(self.ordered) else default
+        raise Exception("unrecognized key type:%s" % type(key))
+
     def __getitem__(self,key):
         if isinstance(key,int): return self.ordered[key]
         if isinstance(key,str): return self.keyed[key]
@@ -50,4 +57,7 @@ cdef class Pyob:
 
     def __contains__(self,thing):
         return thing in self.keyed
+
+    def __nonzero__(self):
+        return bool(self.ordered) or bool(self.keyed)
 
