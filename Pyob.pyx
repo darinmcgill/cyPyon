@@ -42,6 +42,11 @@ cdef class Pyob:
             return self.ordered[key] if key < len(self.ordered) else default
         raise Exception("unrecognized key type:%s" % type(key))
 
+    def setdefault(self,key,default):
+        if isinstance(key,str):
+            return self.keyed.setdefault(key,default)
+        raise Exception("not appropriate key for set default:%s" % key)
+
     def __getitem__(self,key):
         if isinstance(key,int): return self.ordered[key]
         if isinstance(key,str): return self.keyed[key]
@@ -56,8 +61,13 @@ cdef class Pyob:
         if key is None: self.name = value
 
     def __contains__(self,thing):
-        return thing in self.keyed
+        return thing in self.keyed or thing in self.ordered
 
     def __nonzero__(self):
         return bool(self.ordered) or bool(self.keyed)
 
+    def __len__(self):
+        return len(self.ordered)
+
+    def __iter__(self):
+        return iter(self.ordered)
