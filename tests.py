@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 from cyPyon import *
 
 def testAssert():
@@ -135,6 +135,12 @@ def testParseInt():
     p = Parser()
     out = p.parse("42")
     assert repr(out) == '42',repr(out)
+    print "ok"
+
+def testIssues():
+    x = " [13505, 'newStratRunner', 'RKAYITKU', 'prod', 'GC^', w(s(asks=1,bids=1),em=0,exTpv=2,pnl=0.0,pos=0,ppc=0.0,res='GCG3',vlm=0)] "
+    p = Parser()
+    out = p.parse(x)
     print "ok"
 
 

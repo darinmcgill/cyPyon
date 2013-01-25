@@ -3,10 +3,13 @@ cdef class Parser:
     cdef list tokens
     cdef int i
     cdef int n
+    cdef int z
     cdef readDict(Parser self):
         out = dict()
         cdef Token token
         while True:
+            self.z += 1
+            if self.z > 10000: raise Exception("max depth reached WXNABBCFCA")
             if self.i >= self.n: raise Exception("no }?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_CURLY:
@@ -27,6 +30,8 @@ cdef class Parser:
         out = list()
         cdef Token token
         while True:
+            self.z += 1
+            if self.z > 10000: raise Exception("max depth reached MRDKZDUXVS")
             if self.i >= self.n: raise Exception("no ]?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_BRACKET:
@@ -44,6 +49,8 @@ cdef class Parser:
         cdef Token t2
         cdef Token t3
         while True:
+            self.z += 1
+            if self.z > 10000: raise Exception("max depth reached OHWYBQMBOY")
             if self.i >= self.n: raise Exception("no )?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_PAREN:
@@ -60,6 +67,8 @@ cdef class Parser:
                         self.i += 2
                         value = self.readValue()
                         out.keyed[token.value_] = value
+                    else:
+                        out.ordered.append( self.readValue() )
                 else:
                     out.ordered.append( self.readValue() )
     cdef readValue(Parser self):
