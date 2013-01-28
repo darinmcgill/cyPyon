@@ -15,8 +15,10 @@ cdef enum TokenTypes:
     COLON = 58
 
 cdef class Token:
+
     cdef char type_
     cdef object value_
+
     def __repr__(Token self):
         if self.type_ == END: return "End()"
         if self.type_ == BAREWORD: return "Bareword(%r)" % self.value_
@@ -27,6 +29,7 @@ cdef class Token:
                 return "Number(%r)" % int(self.value_)
         if self.type_ == QUOTED: return "Quoted(%r)" % self.value_
         return "Syntax('%s')" % chr(self.type_)
+
     def __richcmp__(self,other,op):
         cdef Token tOther
         if op == 2: 

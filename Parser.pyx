@@ -1,9 +1,11 @@
 
 cdef class Parser:
+
     cdef list tokens
     cdef int i
     cdef int n
     cdef int z
+
     cdef readDict(Parser self):
         out = dict()
         cdef Token token
@@ -26,6 +28,7 @@ cdef class Parser:
                 self.i += 1
                 value = self.readValue()
                 out[key] = value
+
     cdef readList(Parser self):
         out = list()
         cdef Token token
@@ -43,6 +46,7 @@ cdef class Parser:
                 raise Exception("mismatched [")
             else:
                 out.append( self.readValue() )
+
     cdef readPyob(Parser self,str name):
         out = Pyob(name)
         cdef Token token
@@ -71,6 +75,7 @@ cdef class Parser:
                         out.ordered.append( self.readValue() )
                 else:
                     out.ordered.append( self.readValue() )
+
     cdef readValue(Parser self):
         if self.i >= self.n: raise Exception("out of tokens?")
         cdef Token token = <Token> self.tokens[self.i]
@@ -92,9 +97,9 @@ cdef class Parser:
         if token.type_ == OPEN_BRACKET: return self.readList()
         if token.type_ == OPEN_CURLY: return self.readDict()
         raise Exception("don't know how to parse: %r" % token)
+
     cpdef parse(Parser self,char* zstring):
         self.tokens = tokenize(zstring)
         self.i = 0
         self.n = len(self.tokens)
         return self.readValue()
-
