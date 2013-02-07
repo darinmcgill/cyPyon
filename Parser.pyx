@@ -5,13 +5,15 @@ cdef class Parser:
     cdef int i
     cdef int n
     cdef int z
+    cdef object toParse
 
     cdef readDict(Parser self):
         out = dict()
         cdef Token token
         while True:
             self.z += 1
-            if self.z > 10000: raise Exception("max depth reached WXNABBCFCA")
+            if self.z > 10000: 
+                raise Exception("WXNABBCFCA\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no }?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_CURLY:
@@ -34,7 +36,8 @@ cdef class Parser:
         cdef Token token
         while True:
             self.z += 1
-            if self.z > 10000: raise Exception("max depth reached MRDKZDUXVS")
+            if self.z > 10000: 
+                raise Exception("MRDKZDUXVS\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no ]?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_BRACKET:
@@ -54,7 +57,8 @@ cdef class Parser:
         cdef Token t3
         while True:
             self.z += 1
-            if self.z > 10000: raise Exception("max depth reached OHWYBQMBOY")
+            if self.z > 10000: 
+                raise Exception("OHWYBQMBOY\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no )?")
             token = <Token> self.tokens[self.i]
             if token.type_ == CLOSE_PAREN:
@@ -100,12 +104,11 @@ cdef class Parser:
         if token.type_ == OPEN_CURLY: return self.readDict()
         raise Exception("don't know how to parse: %r" % token)
 
-    cpdef parse(Parser self,char* zstring):
-        self.tokens = tokenize(zstring)
+    def parse(Parser self, toParse):
+        self.toParse = toParse
+        self.tokens = tokenize(toParse)
+        self.z = 0
         self.i = 0
         self.n = len(self.tokens)
-        self.z = 0
-        try:
-            return self.readValue()
-        except Exception as e:
-            raise Exception("problem parsing:%s,%s" % (zstring,e))
+        return self.readValue()
+
