@@ -93,6 +93,8 @@ cdef class Parser:
             if token.value_.lower() == "false": return False
             if token.value_.lower() == "none": return None
             if token.value_.lower() == "null": return None
+            if token.value_.lower() == "nan": return float('nan')
+            if token.value_.lower() == "inf": return float('inf')
             raise Exception("bad bareword:" + token.value_)
         if token.type_ == OPEN_BRACKET: return self.readList()
         if token.type_ == OPEN_CURLY: return self.readDict()
