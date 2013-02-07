@@ -138,8 +138,14 @@ def testParseInt():
     assert repr(out) == '42',repr(out)
     print "ok"
 
-def testIssues():
+def testIssue1():
     x = " [13505, 'newStratRunner', 'RKAYITKU', 'prod', 'GC^', w(s(asks=1,bids=1),em=0,exTpv=2,pnl=0.0,pos=0,ppc=0.0,res='GCG3',vlm=0)] "
+    p = Parser()
+    out = p.parse(x)
+    print "ok"
+
+def testIssue2():
+    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2},eV={'ESH3': 2},fees=0.98,open=0.0,slb=-500)]"
     p = Parser()
     out = p.parse(x)
     print "ok"

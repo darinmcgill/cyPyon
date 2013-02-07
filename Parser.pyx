@@ -104,4 +104,8 @@ cdef class Parser:
         self.tokens = tokenize(zstring)
         self.i = 0
         self.n = len(self.tokens)
-        return self.readValue()
+        self.z = 0
+        try:
+            return self.readValue()
+        except Exception as e:
+            raise Exception("problem parsing:%s,%s" % (zstring,e))
