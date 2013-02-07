@@ -11,6 +11,7 @@ cdef class Pyob:
         if keyed is None: keyed = {}
         self.ordered = ordered 
         self.keyed = keyed
+        self.reprMode = 1
 
     def __repr__(self):
         if self.reprMode == 0:

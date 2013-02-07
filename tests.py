@@ -11,6 +11,7 @@ def testAssert():
 
 def testPyob():
     po = Pyob('george')
+    po.reprMode = 0
     assert repr(po) == "Pyob('george',[],{})",repr(po)
     po.reprMode = 1
     assert repr(po) == 'george()',repr(po)
