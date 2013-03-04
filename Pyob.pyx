@@ -13,6 +13,10 @@ cdef class Pyob:
         self.keyed = keyed
         self.reprMode = 1
 
+    __safe_for_unpickling__ = True
+    def __reduce__(self):
+        return (Pyob,(self.name,self.ordered,self.keyed))
+
     def __repr__(self):
         if self.reprMode == 0:
             return "Pyob(%r,%r,%r)" % (self.name,self.ordered,self.keyed)

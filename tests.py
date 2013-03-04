@@ -150,7 +150,14 @@ def testIssue2():
     out = p.parse(x)
     print "ok"
 
-
+def testPickle():
+    import pickle
+    x = Pyob('a',['foo',3],dict(bar=99))
+    y = pickle.loads(pickle.dumps(x))
+    assert x == y,(x,y)
+    assert x is not y
+    assert repr(y) == "a('foo',3,bar=99)",repr(y)
+    
 if __name__ == "__main__":
     failed = list()
     for key in dir():
