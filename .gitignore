@@ -1,3 +1,4 @@
 *.cpp
 *.so
+*.c
 build
