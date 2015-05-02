@@ -45,7 +45,7 @@ cdef class Parser:
                 return out
             elif token.type_ == COMMA:
                 self.i += 1
-            elif token.type_ == CLOSE_PAREN or token.type_ == CLOSE_BRACKET:
+            elif token.type_ == CLOSE_PAREN or token.type_ == CLOSE_CURLY:
                 raise Exception("mismatched [")
             else:
                 out.append( self.readValue() )

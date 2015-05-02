@@ -2,7 +2,7 @@
 
 cdef readNumber(char **stringPtr):
     cdef char* p = stringPtr[0]
-    cdef char sign = 1
+    cdef signed char sign = 1
     if p[0] == 45: 
         sign = -1 # '-'
         p += 1
@@ -11,7 +11,7 @@ cdef readNumber(char **stringPtr):
     cdef long beforeDecimal = 0
     cdef double afterDecimal = 0.0
     cdef int e = 0
-    cdef char eSign = +1 
+    cdef signed char eSign = +1 
     cdef double multiplier = 0.1
     while p[0] >= 48 and p[0] <= 57: # 0-9
         beforeDecimal *= 10
