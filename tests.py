@@ -150,6 +150,12 @@ def testIssue2():
     out = p.parse(x)
     print "ok"
 
+def testParseFunc():
+    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2},eV={'ESH3': 2},fees=0.98,open=0.0,slb=-500)]"
+    out = parse(x)
+    assert out[1] == "bridgeCme",out
+    print "ok"
+
 def testPickle():
     import pickle
     x = Pyob('a',['foo',3],dict(bar=99))

@@ -112,3 +112,6 @@ cdef class Parser:
         self.n = len(self.tokens)
         return self.readValue()
 
+def parse(thing):
+    parser = Parser()
+    return parser.parse(thing)
