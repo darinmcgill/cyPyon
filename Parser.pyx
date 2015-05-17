@@ -2,17 +2,18 @@
 cdef class Parser:
 
     cdef list tokens
-    cdef int i
-    cdef int n
-    cdef int z
-    cdef object toParse
+    cdef int i # token index
+    cdef int n # number of tokens
+    cdef int j # sanity counter
+    cdef int m # number of characters
+    cdef bytes toParse
 
     cdef readDict(Parser self):
         out = dict()
         cdef Token token
         while True:
-            self.z += 1
-            if self.z > 10000: 
+            self.j += 1
+            if self.j > self.m: 
                 raise Exception("WXNABBCFCA\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no }?")
             token = <Token> self.tokens[self.i]
@@ -35,8 +36,8 @@ cdef class Parser:
         out = list()
         cdef Token token
         while True:
-            self.z += 1
-            if self.z > 10000: 
+            self.j += 1
+            if self.j > self.m: 
                 raise Exception("MRDKZDUXVS\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no ]?")
             token = <Token> self.tokens[self.i]
@@ -56,8 +57,8 @@ cdef class Parser:
         cdef Token t2
         cdef Token t3
         while True:
-            self.z += 1
-            if self.z > 10000: 
+            self.j += 1
+            if self.j > self.m: 
                 raise Exception("OHWYBQMBOY\n%s" % self.toParse)
             if self.i >= self.n: raise Exception("no )?")
             token = <Token> self.tokens[self.i]
@@ -107,9 +108,10 @@ cdef class Parser:
     def parse(Parser self, toParse):
         self.toParse = toParse
         self.tokens = tokenize(toParse)
-        self.z = 0
+        self.j = 0
         self.i = 0
         self.n = len(self.tokens)
+        self.m = len(self.toParse)
         return self.readValue()
 
 def parse(thing):
