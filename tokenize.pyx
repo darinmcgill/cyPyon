@@ -7,6 +7,7 @@ cpdef tokenize(char* zstring):
     while True:
         c = p[0]
         if c == 32 or c == 9 or c == 10: p += 1 # whitespace
+        elif c == 35 or c == 47: readComment(&p)
         elif c >= 97 and c <= 122: out.append(readBareword(&p)) # a-z
         elif c >= 65 and c <= 90:  out.append(readBareword(&p)) # A-Z
         elif c >= 48 and c <= 57:  out.append(readNumber(&p))   # 0-9

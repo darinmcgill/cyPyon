@@ -80,3 +80,22 @@ cdef readString(char ** stringPtr):
     token.value_ = out
     return token
 
+cdef readComment(char **stringPtr):
+    if stringPtr[0][0] == 35:
+        stringPtr[0] += 1
+        while stringPtr[0][0] != 10 and stringPtr[0][0] != 0:
+            stringPtr[0] += 1
+        return 
+    if stringPtr[0][0] == 47 and stringPtr[0][1] == 47:
+        stringPtr[0] += 2
+        while stringPtr[0][0] != 10 and stringPtr[0][0] != 0:
+            stringPtr[0] += 1
+        return 
+    if stringPtr[0][0] == 47 and stringPtr[0][1] == 42:
+        stringPtr[0] += 2
+        while stringPtr[0][0] != 0:
+            if stringPtr[0][0] == 42 and stringPtr[0][1] == 47:
+                stringPtr[0] += 2
+                return
+            stringPtr[0] += 1
+        return 

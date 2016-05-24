@@ -163,6 +163,13 @@ def testPickle():
     assert x == y,(x,y)
     assert x is not y
     assert repr(y) == "a('foo',3,bar=99)",repr(y)
+
+def testComments():
+    x = "[17926,  #cheese\n3, /* nevermind */7]"
+    out = parse(x)
+    assert out[1] == 3,out
+    assert out[2] == 7,out
+    print "ok"
     
 if __name__ == "__main__":
     failed = list()
