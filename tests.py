@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
-cyPyon = __import__('cyPyon', globals(), locals(), [], -1)
+#cyPyon = __import__('cyPyon', globals(), locals(), [], -1)
+import cyPyon
 
 
 def test_assert():
@@ -29,30 +30,30 @@ def one_token_test(string, expected):
 
 
 def test_tokenize_int():
-    one_token_test("3", "Number(3)")
-    one_token_test("33", "Number(33)")
-    one_token_test("-3", "Number(-3)")
-    one_token_test("+5709", "Number(5709)")
+    one_token_test(b"3", "Number(3)")
+    one_token_test(b"33", "Number(33)")
+    one_token_test(b"-3", "Number(-3)")
+    one_token_test(b"+5709", "Number(5709)")
     print("ok")
 
 
 def test_tokenize_float():
-    one_token_test("3.3", "Number(3.3)")
-    one_token_test("-3.3", "Number(-3.3)")
-    one_token_test("-.25", "Number(-0.25)")
-    one_token_test("-.25e2", "Number(-25.0)")
-    one_token_test("25e-2", "Number(0.25)")
+    one_token_test(b"3.3", "Number(3.3)")
+    one_token_test(b"-3.3", "Number(-3.3)")
+    one_token_test(b"-.25", "Number(-0.25)")
+    one_token_test(b"-.25e2", "Number(-25.0)")
+    one_token_test(b"25e-2", "Number(0.25)")
     print("ok")
 
 
 def test_tokenize_syntax():
-    one_token_test(":", "Syntax(':')")
-    one_token_test(",", "Syntax(',')")
+    one_token_test(b":", "Syntax(':')")
+    one_token_test(b",", "Syntax(',')")
     print("ok")
 
 
 def test_tokenize_seq():
-    string = "[1,2 3]  ="
+    string = b"[1,2 3]  ="
     out = cyPyon.tokenize(string)
     s = map(str, out)
     assert s == ["Syntax('[')", 'Number(1)', "Syntax(',')",
@@ -60,20 +61,20 @@ def test_tokenize_seq():
 
 
 def test_tokenize_barework():
-    one_token_test("a", "Bareword('a')")
-    one_token_test("ab", "Bareword('ab')")
+    one_token_test(b"a", "Bareword('a')")
+    one_token_test(b"ab", "Bareword('ab')")
     print("ok")
 
 
 def test_tokenize_string():
-    one_token_test("''", "Quoted('')")
-    one_token_test("'a'", "Quoted('a')")
-    one_token_test("'ab'", "Quoted('ab')")
+    one_token_test(b"''", "Quoted('')")
+    one_token_test(b"'a'", "Quoted('a')")
+    one_token_test(b"'ab'", "Quoted('ab')")
     print("ok")
 
 
 def test_tokenize_all():
-    string = "[1,foo 'bar'=3.25"
+    string = b"[1,foo 'bar'=3.25"
     out = cyPyon.tokenize(string)
     s = list(map(str, out))
     assert s == ["Syntax('[')", 'Number(1)', "Syntax(',')", "Bareword('foo')", 
@@ -193,6 +194,7 @@ def test_pickle():
     assert x == y, (x, y)
     assert x is not y
     assert repr(y) == "a('foo',3,bar=99)", repr(y)
+    print("ok")
 
 
 def test_comments():
@@ -204,6 +206,10 @@ def test_comments():
 
 
 if __name__ == "__main__":
+    import sys
+    if sys.argv[1:]:
+        eval("%s()" % sys.argv[1])
+        sys.exit(0)
     failed = list()
     for key in dir():
         if key.startswith("test"):

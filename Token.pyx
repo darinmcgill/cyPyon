@@ -27,16 +27,20 @@ cdef class Token:
                 return "Number(%r)" % self.value_
             else:
                 return "Number(%r)" % int(self.value_)
-        if self.type_ == QUOTED: return "Quoted(%r)" % self.value_
+        if self.type_ == QUOTED:
+            return "Quoted(%r)" % self.value_
         return "Syntax('%s')" % chr(self.type_)
 
     def __richcmp__(self,other,op):
-        cdef Token tOther
+        cdef Token other_token
         if op == 2: 
-            if not isinstance(other,Token): return False
-            tOther = <Token> other
-            if tOther.type_ != self.type_: return False
-            if tOther.value_ != self.value_: return False
+            if not isinstance(other, Token):
+                return False
+            other_token = <Token> other
+            if other_token.type_ != self.type_:
+                return False
+            if other_token.value_ != self.value_:
+                return False
             return True
         else:
             raise Exception("operation not supported: %s" % op)

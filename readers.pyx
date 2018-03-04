@@ -66,18 +66,19 @@ cdef readBareword(char **stringPtr):
     token.value_ = out
     return token
 
-cdef readString(char ** stringPtr):
-    cdef char quote = stringPtr[0][0]
-    cdef char* startAt = stringPtr[0] + 1
-    cdef char* endAt = startAt
-    while endAt[0] != quote and endAt[0] != 0:
-        endAt += 1
-    cdef int length = endAt - startAt
-    cdef bytes out = PyBytes_FromStringAndSize(startAt,length)
-    stringPtr[0] += length + 2
+cdef readString(char** string_ptr):
+    cdef char quote = string_ptr[0][0]
+    cdef char* start_at = string_ptr[0] + 1
+    cdef char* end_at = start_at
+    while end_at[0] != quote and end_at[0] != 0:
+        end_at += 1
+    cdef int length = end_at - start_at
+    cdef bytes out1 = PyBytes_FromStringAndSize(start_at, length)
+    cdef unicode out2 = out1.decode()
+    string_ptr[0] += length + 2
     cdef Token token = Token()
     token.type_ = QUOTED
-    token.value_ = out
+    token.value_ = out2
     return token
 
 cdef readComment(char **stringPtr):

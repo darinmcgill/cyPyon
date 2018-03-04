@@ -1,7 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+from __future__ import print_function
 
 import sys
-print sys.version
+print(sys.version)
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
