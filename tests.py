@@ -1,185 +1,216 @@
 #!/usr/bin/env python
-from cyPyon import *
+from __future__ import print_function
+cyPyon = __import__('cyPyon', globals(), locals(), [], -1)
 
-def testAssert():
-    try:
-        assert False
-    except:
-        print "ok"
-        return
+
+def test_assert():
+    if cyPyon:
+        try:
+            assert False
+        except Exception:
+            print("ok")
+            return
     raise Exception("assertions not enabled?")
 
-def testPyob():
-    po = Pyob('george')
+
+def test_pyob():
+    po = cyPyon.Pyob('george')
     po.reprMode = 0
-    assert repr(po) == "Pyob('george',[],{})",repr(po)
+    assert repr(po) == "Pyob('george',[],{})", repr(po)
     po.reprMode = 1
-    assert repr(po) == 'george()',repr(po)
-    print "ok"
+    assert repr(po) == 'george()', repr(po)
+    print("ok")
 
-def oneTokenTest(string,expected):
-    out = tokenize(string)
-    assert len(out) == 2, (string,out)
-    assert repr(out[0]) == expected, (repr(out[0]),expected)
 
-def testTokenizeInt():
-    oneTokenTest("3","Number(3)")
-    oneTokenTest("33","Number(33)")
-    oneTokenTest("-3","Number(-3)")
-    oneTokenTest("+5709","Number(5709)")
-    print "ok"
+def one_token_test(string, expected):
+    out = cyPyon.tokenize(string)
+    assert len(out) == 2, (string, out)
+    assert repr(out[0]) == expected, (repr(out[0]), expected)
 
-def testTokenizeFloat():
-    oneTokenTest("3.3","Number(3.3)")
-    oneTokenTest("-3.3","Number(-3.3)")
-    oneTokenTest("-.25","Number(-0.25)")
-    oneTokenTest("-.25e2","Number(-25.0)")
-    oneTokenTest("25e-2","Number(0.25)")
-    print "ok"
 
-def testTokenizeSyntax():
-    oneTokenTest(":","Syntax(':')")
-    oneTokenTest(",","Syntax(',')")
-    print "ok"
+def test_tokenize_int():
+    one_token_test("3", "Number(3)")
+    one_token_test("33", "Number(33)")
+    one_token_test("-3", "Number(-3)")
+    one_token_test("+5709", "Number(5709)")
+    print("ok")
 
-def testTokenizeSeq():
+
+def test_tokenize_float():
+    one_token_test("3.3", "Number(3.3)")
+    one_token_test("-3.3", "Number(-3.3)")
+    one_token_test("-.25", "Number(-0.25)")
+    one_token_test("-.25e2", "Number(-25.0)")
+    one_token_test("25e-2", "Number(0.25)")
+    print("ok")
+
+
+def test_tokenize_syntax():
+    one_token_test(":", "Syntax(':')")
+    one_token_test(",", "Syntax(',')")
+    print("ok")
+
+
+def test_tokenize_seq():
     string = "[1,2 3]  ="
-    out = tokenize(string)
-    s = map(str,out)
-    assert s ==  ["Syntax('[')", 'Number(1)', "Syntax(',')", 
-        'Number(2)', 'Number(3)', "Syntax(']')", "Syntax('=')", 'End()'],s
+    out = cyPyon.tokenize(string)
+    s = map(str, out)
+    assert s == ["Syntax('[')", 'Number(1)', "Syntax(',')",
+                 'Number(2)', 'Number(3)', "Syntax(']')", "Syntax('=')", 'End()'], s
 
-def testTokenizeBareword():
-    oneTokenTest("a","Bareword('a')")
-    oneTokenTest("ab","Bareword('ab')")
-    print "ok"
 
-def testTokenizeString():
-    oneTokenTest("''","Quoted('')")
-    oneTokenTest("'a'","Quoted('a')")
-    oneTokenTest("'ab'","Quoted('ab')")
-    print "ok"
+def test_tokenize_barework():
+    one_token_test("a", "Bareword('a')")
+    one_token_test("ab", "Bareword('ab')")
+    print("ok")
 
-def testTokenizeAll():
+
+def test_tokenize_string():
+    one_token_test("''", "Quoted('')")
+    one_token_test("'a'", "Quoted('a')")
+    one_token_test("'ab'", "Quoted('ab')")
+    print("ok")
+
+
+def test_tokenize_all():
     string = "[1,foo 'bar'=3.25"
-    out = tokenize(string)
-    s = map(str,out)
+    out = cyPyon.tokenize(string)
+    s = list(map(str, out))
     assert s == ["Syntax('[')", 'Number(1)', "Syntax(',')", "Bareword('foo')", 
-        "Quoted('bar')", "Syntax('=')", 'Number(3.25)', 'End()'], s
-    print "ok"
+                 "Quoted('bar')", "Syntax('=')", 'Number(3.25)', 'End()'], s
+    print("ok")
 
-def testParseScalar():
-    parser = Parser()
+
+def test_parse_scalar():
+    parser = cyPyon.Parser()
     out = parser.parse("3")
-    assert out == 3,out
+    assert out == 3, out
     out = parser.parse("'foo'")
-    assert out == 'foo',out
+    assert out == 'foo', out
     out = parser.parse("True")
-    assert out == True,out
+    assert out is True, out
     out = parser.parse("None")
-    assert out == None,out
-    print "ok"
+    assert out is None, out
+    print("ok")
 
-def testParseArray():
-    parser = Parser()
+
+def test_parse_array():
+    parser = cyPyon.Parser()
     out = parser.parse("[]")
-    assert out == [],out
+    assert out == [], out
     out = parser.parse("[1]")
-    assert out == [1],out
+    assert out == [1], out
     out = parser.parse("[1,'foo']")
-    assert out == [1,'foo'],out
+    assert out == [1, 'foo'], out
     out = parser.parse("[[None,'bar'],1]")
-    assert out == [[None,'bar'],1],out
-    print "ok"
+    assert out == [[None, 'bar'], 1], out
+    print("ok")
 
-def testParseDict():
-    parser = Parser()
+
+def test_parse_dict():
+    parser = cyPyon.Parser()
     out = parser.parse("{}")
-    assert out == {},out
+    assert out == {}, out
     out = parser.parse("{1:3}")
-    assert out == {1:3},out
+    assert out == {1: 3}, out
     out = parser.parse("{1:'foo','bar':19}")
-    assert out == {1:'foo','bar':19},out
+    assert out == {1: 'foo', 'bar': 19}, out
     out = parser.parse("{1:[0],3:{7:9}}")
-    assert out == {1:[0],3:{7:9}},out
-    print "ok"
+    assert out == {1: [0], 3: {7: 9}}, out
+    print("ok")
 
-def testParsePyob():
-    parser = Parser()
+
+def test_parser_pyob():
+    parser = cyPyon.Parser()
     out = parser.parse("A()")
-    assert out == Pyob('A'),out
+    assert out == cyPyon.Pyob('A'), out
     out = parser.parse("Ab(9)")
-    assert out == Pyob('Ab',[9]),out
+    assert out == cyPyon.Pyob('Ab', [9]), out
     out = parser.parse("Ab(9,10,foo=3)")
-    assert out == Pyob('Ab',[9,10],{'foo':3}),out
-    print "ok"
+    assert out == cyPyon.Pyob('Ab', [9, 10], {'foo': 3}), out
+    print("ok")
 
-def testPyonCompare():
-    parser = Parser()
+
+def test_pyon_compare():
+    parser = cyPyon.Parser()
+    _ = """
     class Ab:
         def __init__(self,*a,**b): pass
+    out1 = eval(x)  # type: Ab
+    """
     x = "Ab([92],foo={3:12},bar=None)"
-    out = eval(x)
-    out = parser.parse(x)
-    assert out == Pyob('Ab',[[92]],{'foo':{3:12},'bar':None}),out
-    print "ok"
+    out2 = parser.parse(x)
+    assert out2 == cyPyon.Pyob('Ab', [[92]], {'foo': {3: 12}, 'bar': None}), out2
+    print("ok")
 
-def testPyobReprMode():
-    p = Pyob("foo")
+
+def test_pyob_repr_mode():
+    p = cyPyon.Pyob("foo")
     p["bar"] = 3
     p[0] = "cheese"
     p.reprMode = 1
-    assert repr(p) == "foo('cheese',bar=3)",repr(p)
-    print "ok"
+    assert repr(p) == "foo('cheese',bar=3)", repr(p)
+    print("ok")
 
-def testParseInt():
-    p = Parser()
+
+def test_parse_int():
+    p = cyPyon.Parser()
     out = p.parse("42")
-    assert repr(out) == '42',repr(out)
-    print "ok"
+    assert repr(out) == '42', repr(out)
+    print("ok")
 
-def testIssue1():
-    x = " [13505, 'newStratRunner', 'RKAYITKU', 'prod', 'GC^', w(s(asks=1,bids=1),em=0,exTpv=2,pnl=0.0,pos=0,ppc=0.0,res='GCG3',vlm=0)] "
-    p = Parser()
+
+def test_issue1():
+    x = "[13505, 'newStratRunner', 'RKAYITKU', 'prod', 'GC^', w(s(asks=1,bids=1),em=0,exTpv=2,pnl=0.0,pos=0,ppc=0.0," +\
+        "res='GCG3',vlm=0)] "
+    p = cyPyon.Parser()
     out = p.parse(x)
-    print "ok"
+    assert out
+    print("ok")
 
-def testIssue2():
-    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2},eV={'ESH3': 2},fees=0.98,open=0.0,slb=-500)]"
-    p = Parser()
+
+def test_issue2():
+    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2},eV={'ESH3': 2}," + \
+        "fees=0.98,open=0.0,slb=-500)]"
+    p = cyPyon.Parser()
     out = p.parse(x)
-    print "ok"
+    assert out
+    print("ok")
 
-def testParseFunc():
-    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2},eV={'ESH3': 2},fees=0.98,open=0.0,slb=-500)]"
-    out = parse(x)
-    assert out[1] == "bridgeCme",out
-    print "ok"
 
-def testPickle():
+def test_parse_func():
+    x = "[17926, 'bridgeCme', 'FGGJTXDY', t(_pnl=-13.48,_pos={},closed=-12.5,eS={'ESH3': 2}," + \
+        "eV={'ESH3': 2},fees=0.98,open=0.0,slb=-500)]"
+    out = cyPyon.parse(x)
+    assert out[1] == "bridgeCme", out
+    print("ok")
+
+
+def test_pickle():
     import pickle
-    x = Pyob('a',['foo',3],dict(bar=99))
+    x = cyPyon.Pyob('a', ['foo', 3], dict(bar=99))
     y = pickle.loads(pickle.dumps(x))
-    assert x == y,(x,y)
+    assert x == y, (x, y)
     assert x is not y
-    assert repr(y) == "a('foo',3,bar=99)",repr(y)
+    assert repr(y) == "a('foo',3,bar=99)", repr(y)
 
-def testComments():
+
+def test_comments():
     x = "[17926,  #cheese\n3, /* nevermind */7]"
-    out = parse(x)
-    assert out[1] == 3,out
-    assert out[2] == 7,out
-    print "ok"
-    
+    out = cyPyon.parse(x)
+    assert out[1] == 3, out
+    assert out[2] == 7, out
+    print("ok")
+
+
 if __name__ == "__main__":
     failed = list()
     for key in dir():
-       if key.startswith("test"):
-            print key,
-            try: eval("%s()" % key)
+        if key.startswith("test"):
+            print(key, end=" ")
+            try:
+                eval("%s()" % key)
             except Exception as e: 
                 failed.append(key)
-                print "failed",e
-    print "failed:",failed
-
-             
+                print("failed", e)
+    print("failed:", failed)

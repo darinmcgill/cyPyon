@@ -2,3 +2,5 @@
 *.so
 *.c
 build
+.idea
+*.pyc
