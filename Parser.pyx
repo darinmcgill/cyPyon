@@ -109,8 +109,8 @@ cdef class Parser:
         raise Exception("don't know how to parse: %r" % token)
 
     def parse(Parser self, toParse):
-        self.toParse = toParse
-        self.tokens = tokenize(toParse)
+        self.toParse = toParse if isinstance(toParse, bytes) else toParse.encode()
+        self.tokens = tokenize(self.toParse)
         self.j = 0
         self.i = 0
         self.n = len(self.tokens)

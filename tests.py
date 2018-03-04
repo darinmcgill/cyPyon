@@ -132,6 +132,17 @@ def test_parser_pyob():
     print("ok")
 
 
+def test_parser_pyob_unicode():
+    parser = cyPyon.Parser()
+    out = parser.parse(u"A()")
+    assert out == cyPyon.Pyob('A'), out
+    out = parser.parse(u"Ab(9)")
+    assert out == cyPyon.Pyob('Ab', [9]), out
+    out = parser.parse(u"Ab(9,10,foo=3)")
+    assert out == cyPyon.Pyob('Ab', [9, 10], {'foo': 3}), out
+    print("ok")
+
+
 def test_pyon_compare():
     parser = cyPyon.Parser()
     _ = """
