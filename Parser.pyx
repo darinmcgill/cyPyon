@@ -1,4 +1,7 @@
 
+include "Pyob.pyx"
+include "tokenize.pyx"
+
 cdef class Parser:
 
     cdef list tokens
@@ -51,7 +54,7 @@ cdef class Parser:
             else:
                 out.append( self.readValue() )
 
-    cdef readPyob(Parser self,str name):
+    cdef readPyob(Parser self, unicode name):
         out = Pyob(name)
         cdef Token token
         cdef Token t2

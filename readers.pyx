@@ -1,4 +1,5 @@
-
+include "Token.pyx"
+from cpython.bytes cimport PyBytes_FromStringAndSize
 
 cdef readNumber(char **stringPtr):
     cdef char* p = stringPtr[0]
@@ -49,21 +50,22 @@ cdef readNumber(char **stringPtr):
     token.value_ = out
     return token
         
-cdef readBareword(char **stringPtr):
-    cdef char* endAt = stringPtr[0]
+cdef read_bareword(char **string_ptr):
+    cdef char* end_at = string_ptr[0]
     while True:
-        endAt += 1
-        if endAt[0] >= 97 and endAt[0] <= 122: continue # a-z
-        if endAt[0] >= 65 and endAt[0] <= 90: continue # A-Z
-        if endAt[0] >= 48 and endAt[0] <= 57: continue # 0-9
-        if endAt[0] == 95: continue # '_'
+        end_at += 1
+        if 97 <= end_at[0] <= 122: continue # a-z
+        if 65 <= end_at[0] <= 90: continue # A-Z
+        if 48 <= end_at[0] <= 57: continue # 0-9
+        if end_at[0] == 95: continue # '_'
         break
-    cdef int length = endAt-stringPtr[0]
-    cdef bytes out = PyBytes_FromStringAndSize(stringPtr[0],length)
-    stringPtr[0] += length
+    cdef int length = end_at - string_ptr[0]
+    cdef bytes out1 = PyBytes_FromStringAndSize(string_ptr[0], length)
+    cdef unicode out2 = out1.decode()
+    string_ptr[0] += length
     cdef Token token = Token()
     token.type_ = BAREWORD
-    token.value_ = out
+    token.value_ = out2
     return token
 
 cdef readString(char** string_ptr):

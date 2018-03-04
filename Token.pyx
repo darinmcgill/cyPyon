@@ -20,16 +20,18 @@ cdef class Token:
     cdef object value_
 
     def __repr__(Token self):
-        if self.type_ == END: return "End()"
-        if self.type_ == BAREWORD: return "Bareword(%r)" % self.value_
+        if self.type_ == END:
+            return "End()"
+        if self.type_ == BAREWORD:
+            return "Bareword(u'%s')" % self.value_
         if self.type_ == NUMBER: 
             if isinstance(self.value_,float):
                 return "Number(%r)" % self.value_
             else:
                 return "Number(%r)" % int(self.value_)
         if self.type_ == QUOTED:
-            return "Quoted(%r)" % self.value_
-        return "Syntax('%s')" % chr(self.type_)
+            return "Quoted(u'%s')" % self.value_
+        return "Syntax(b'%s')" % chr(self.type_)
 
     def __richcmp__(self,other,op):
         cdef Token other_token

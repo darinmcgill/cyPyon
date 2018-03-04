@@ -1,12 +1,12 @@
 cdef class Pyob:
 
-    cdef public str name
+    cdef public unicode name
     cdef public list ordered
     cdef public dict keyed
     cdef public char reprMode
 
     def __init__(self,name,ordered=None,keyed=None):
-        self.name = name
+        self.name = name if isinstance(name, unicode) else name.decode()
         if ordered is None: ordered = []
         if keyed is None: keyed = {}
         self.ordered = ordered 
@@ -15,19 +15,19 @@ cdef class Pyob:
 
     __safe_for_unpickling__ = True
     def __reduce__(self):
-        return (Pyob,(self.name,self.ordered,self.keyed))
+        return Pyob,(self.name, self.ordered, self.keyed)
 
     def __repr__(self):
         if self.reprMode == 0:
-            return "Pyob(%r,%r,%r)" % (self.name,self.ordered,self.keyed)
+            return "Pyob(u'%s',%r,%r)" % (self.name,self.ordered,self.keyed)
         elif self.reprMode == 1:
-            oPart = ",".join([repr(x) for x in self.ordered])
+            o_part = ",".join([repr(x) for x in self.ordered])
             keys = sorted(self.keyed.keys())
-            kPart = ",".join(["%s=%r" % (k,self.keyed[k]) for k in keys])
-            if oPart and kPart:
-                return "%s(%s,%s)" % (self.name,oPart,kPart) 
-            elif oPart or kPart:
-                return "%s(%s)" % (self.name,oPart or kPart)
+            k_part = ",".join(["%s=%r" % (k,self.keyed[k]) for k in keys])
+            if o_part and k_part:
+                return "%s(%s,%s)" % (self.name,o_part,k_part)
+            elif o_part or k_part:
+                return "%s(%s)" % (self.name,o_part or k_part)
             else:
                 return "%s()" % self.name
 
