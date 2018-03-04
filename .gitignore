@@ -4,3 +4,6 @@
 build
 .idea
 *.pyc
+MANIFEST
+dist
+*.egg-info
