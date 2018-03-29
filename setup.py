@@ -16,6 +16,7 @@ setup(
     url='https://github.com/darinmcgill/cyPyon',
     version='2.0.0',
     ext_modules=[ext],
+    license='GPLv3',
     keywords='pyon parser',
     cmdclass={'build_ext': build_ext},
     install_requires=['Cython'],
